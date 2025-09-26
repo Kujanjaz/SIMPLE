@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Mastery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            text-decoration: line-through;
+            border-left-color: #10b981;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .task-checkbox.checked {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .task-description {
+            color: #666;
+            margin-left: 39px;
+            font-size: 0.9rem;
+        }
+
+        .add-task-form {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            margin-left: 10px;
+        }
+
+        .sigil-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .sigil {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .sigil-level {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .aspects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .aspect {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .aspect-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .aspect-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        .success-animation {
+            animation: successPulse 0.6s ease-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background: #10b981; }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⭐ Inner Mastery</h1>
+            <p>Building a high-agency life system through symbolic progression</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showSection('tasks')">📝 Tasks</div>
+            <div class="tab" onclick="showSection('goals')">🎯 Goals</div>
+            <div class="tab" onclick="showSection('sigil')">⭐ Sigil</div>
+            <div class="tab" onclick="showSection('progress')">📊 Progress</div>
+        </div>
+
+        <div class="content">
+            <!-- Tasks Section -->
+            <div id="tasks" class="section active">
+                <div class="add-task-form">
+                    <h3 style="margin-bottom: 20px; color: #333;">Add New Task</h3>
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title</label>
+                        <input type="text" id="taskTitle" placeholder="e.g., Drink 2L of water today">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description (optional)</label>
+                        <textarea id="taskDescription" rows="2" placeholder="Additional details..."></textarea>
+                    </div>
+                    <button class="btn" onclick="addTask()">Add Task</button>
+                </div>
+
+                <div id="tasksList">
+                    <!-- Tasks will be added here -->
+                </div>
+            </div>
+
+            <!-- Goals Section -->
+            <div id="goals" class="section">
+                <div class="add-task-form">
+                    <h3 style="margin-bottom: 20px; color: #333;">Add New Goal</h3>
+                    <div class="form-group">
+                        <label for="goalTitle">Goal Title</label>
+                        <input type="text" id="goalTitle" placeholder="e.g., Learn React Mastery">
+                    </div>
+                    <div class="form-group">
+                        <label for="goalDescription">Description</label>
+                        <textarea id="goalDescription" rows="3" placeholder="Describe what you want to achieve..."></textarea>
+                    </div>
+                    <button class="btn" onclick="addGoal()">Add Goal</button>
+                </div>
+
+                <div id="goalsList">
+                    <!-- Goals will be added here -->
+                </div>
+            </div>
+
+            <!-- Sigil Section -->
+            <div id="sigil" class="section">
+                <div class="sigil-container">
+                    <div class="sigil-level" id="sigilLevel">Novice</div>
+                    <div class="sigil" id="sigilDisplay">○</div>
+                    <p style="color: #666; margin-bottom: 30px;">Your sigil evolves with each completed task</p>
+                    
+                    <div class="aspects">
+                        <div class="aspect">
+                            <div class="aspect-name">Discipline</div>
+                            <div class="aspect-value" id="disciplineValue">0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="disciplineProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="aspect">
+                            <div class="aspect-name">Knowledge</div>
+                            <div class="aspect-value" id="knowledgeValue">0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="knowledgeProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="aspect">
+                            <div class="aspect-name">Creativity</div>
+                            <div class="aspect-value" id="creativityValue">0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="creativityProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="aspect">
+                            <div class="aspect-name">Physical</div>
+                            <div class="aspect-value" id="physicalValue">0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="physicalProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="aspect">
+                            <div class="aspect-name">Spiritual</div>
+                            <div class="aspect-value" id="spiritualValue">0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="spiritualProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progress" class="section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTasks">0</div>
+                        <div class="stat-label">Tasks Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalMastery">0</div>
+                        <div class="stat-label">Total Mastery</div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                    <h3 style="margin-bottom: 20px; color: #333;">Recent Activity</h3>
+                    <div id="recentActivity">
+                        <div class="empty-state">
+                            <h3>Start your journey</h3>
+                            <p>Complete tasks to see your progress here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let tasks = JSON.parse(localStorage.getItem('innerMasteryTasks') || '[]');
+        let goals = JSON.parse(localStorage.getItem('innerMasteryGoals') || '[]');
+        let sigil = JSON.parse(localStorage.getItem('innerMasterySigil') || JSON.stringify({
+            level: 'novice',
+            aspects: { discipline: 0, knowledge: 0, creativity: 0, physical: 0, spiritual: 0 }
+        }));
+        let stats = JSON.parse(localStorage.getItem('innerMasteryStats') || JSON.stringify({
+            totalTasks: 0,
+            currentStreak: 0,
+            totalMastery: 0
+        }));
+
+        // Initialize app
+        function init() {
+            renderTasks();
+            renderGoals();
+            updateSigil();
+            updateStats();
+        }
+
+        // Tab switching
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Task management
+        function addTask() {
+            const title = document.getElementById('taskTitle').value.trim();
+            const description = document.getElementById('taskDescription').value.trim();
+            
+            if (!title) return;
+            
+            const task = {
+                id: Date.now(),
+                title: title,
+                description: description,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            tasks.push(task);
+            saveData();
+            renderTasks();
+            
+            // Clear form
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDescription').value = '';
+        }
+
+        function toggleTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            task.completed = !task.completed;
+            
+            if (task.completed) {
+                // Add success animation
+                const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+                taskElement.classList.add('success-animation');
+                
+                // Update sigil
+                sigil.aspects.discipline += 1;
+                updateSigil();
+                
+                // Update stats
+                stats.totalTasks += 1;
+                updateStats();
+                
+                // Remove task after animation (for one-off tasks)
+                setTimeout(() => {
+                    tasks = tasks.filter(t => t.id !== taskId);
+                    saveData();
+                    renderTasks();
+                }, 1500);
+            } else {
+                // Revert sigil change
+                sigil.aspects.discipline = Math.max(0, sigil.aspects.discipline - 1);
+                updateSigil();
+                
+                // Revert stats
+                stats.totalTasks = Math.max(0, stats.totalTasks - 1);
+                updateStats();
+            }
+            
+            saveData();
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('tasksList');
+            const incompleteTasks = tasks.filter(t => !t.completed);
+            
+            if (incompleteTasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No tasks for today</h3>
+                        <p>Add a task to get started on your journey!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = incompleteTasks.map(task => `
+                <div class="task-item" data-task-id="${task.id}">
+                    <div class="task-header">
+                        <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${task.id})">
+                            ${task.completed ? '✓' : ''}
+                        </div>
+                        <div class="task-title">${task.title}</div>
+                    </div>
+                    ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Goal management
+        function addGoal() {
+            const title = document.getElementById('goalTitle').value.trim();
+            const description = document.getElementById('goalDescription').value.trim();
+            
+            if (!title) return;
+            
+            const goal = {
+                id: Date.now(),
+                title: title,
+                description: description,
+                progress: 0,
+                createdAt: new Date().toISOString()
+            };
+            
+            goals.push(goal);
+            saveData();
+            renderGoals();
+            
+            // Clear form
+            document.getElementById('goalTitle').value = '';
+            document.getElementById('goalDescription').value = '';
+        }
+
+        function renderGoals() {
+            const container = document.getElementById('goalsList');
+            
+            if (goals.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No goals yet</h3>
+                        <p>Create your first goal to start tracking progress!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = goals.map(goal => `
+                <div class="task-item">
+                    <div class="task-header">
+                        <div class="task-title">${goal.title}</div>
+                    </div>
+                    <div class="task-description">${goal.description}</div>
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Progress</span>
+                            <span>${goal.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${goal.progress}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Sigil management
+        function updateSigil() {
+            const total = Object.values(sigil.aspects).reduce((sum, val) => sum + val, 0);
+            
+            // Update level
+            let level = 'novice';
+            let symbol = '○';
+            if (total >= 50) { level = 'master'; symbol = '●'; }
+            else if (total >= 25) { level = 'adept'; symbol = '◑'; }
+            else if (total >= 10) { level = 'apprentice'; symbol = '◐'; }
+            
+            sigil.level = level;
+            document.getElementById('sigilLevel').textContent = level.charAt(0).toUpperCase() + level.slice(1);
+            document.getElementById('sigilDisplay').textContent = symbol;
+            
+            // Update aspects
+            Object.keys(sigil.aspects).forEach(aspect => {
+                const value = sigil.aspects[aspect];
+                const maxValue = Math.max(...Object.values(sigil.aspects), 1);
+                const percentage = (value / maxValue) * 100;
+                
+                document.getElementById(`${aspect}Value`).textContent = value;
+                document.getElementById(`${aspect}Progress`).style.width = `${percentage}%`;
+            });
+            
+            // Update total mastery
+            stats.totalMastery = total;
+            document.getElementById('totalMastery').textContent = total;
+        }
+
+        // Stats management
+        function updateStats() {
+            document.getElementById('totalTasks').textContent = stats.totalTasks;
+            document.getElementById('currentStreak').textContent = stats.currentStreak;
+            document.getElementById('totalMastery').textContent = stats.totalMastery;
+        }
+
+        // Data persistence
+        function saveData() {
+            localStorage.setItem('innerMasteryTasks', JSON.stringify(tasks));
+            localStorage.setItem('innerMasteryGoals', JSON.stringify(goals));
+            localStorage.setItem('innerMasterySigil', JSON.stringify(sigil));
+            localStorage.setItem('innerMasteryStats', JSON.stringify(stats));
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
