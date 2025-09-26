@@ -14,8 +14,7 @@
     "react-dom": "^18.2.0",
     "zustand": "^4.4.7",
     "framer-motion": "^10.16.16",
-    "chart.js": "^4.4.0",
-    "react-chartjs-2": "^5.2.0",
+    "recharts": "^2.8.0",
     "lucide-react": "^0.294.0",
     "date-fns": "^2.30.0"
   },
